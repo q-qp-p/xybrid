@@ -8,6 +8,13 @@
   `qwen3.5-0.8b`, download and load normally. An uncached speculative load now
   fails when the registry is unreachable. `willSpeculate` still reads only the
   local cache; `XybridModel.isCloudServing` reports the outcome.
+* Changed: a run, pipeline run or stream whose output `XybridResult` has no
+  field for fails with an `Unsupported model capability:` error, instead of
+  returning `success: true` with text, audio and embedding all empty. No
+  shipped model produces such an output, so existing results are unchanged.
+* Fixed: `runStreaming` and `runStreamingWithFallback` ignored an error that
+  arrived after the final token, so a run that failed once generation stopped
+  looked like a successful stop. They now end the stream with the error token.
 * Fixed: registry requests and telemetry say `flutter` on every platform.
   On iOS, macOS, Linux and Windows without an API key they said `rust`.
 
